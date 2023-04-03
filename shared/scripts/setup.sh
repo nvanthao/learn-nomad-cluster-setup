@@ -65,9 +65,9 @@ curl -L -o cni-plugins.tgz "https://github.com/containernetworking/plugins/relea
 sudo mkdir -p /opt/cni/bin
 sudo tar -C /opt/cni/bin -xzf cni-plugins.tgz
 
-echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-arptables
-echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-ip6tables
-echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-iptables
+echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-arptables &&
+  echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-ip6tables &&
+  echo 1 | sudo tee /proc/sys/net/bridge/bridge-nf-call-iptables
 
 # Consul
 
