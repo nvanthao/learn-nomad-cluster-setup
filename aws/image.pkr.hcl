@@ -47,6 +47,18 @@ source "amazon-ebs" "hashistack" {
 }
 
 build {
+  hcp_packer_registry {
+    bucket_name = "nomad-consul-ubuntu"
+    description = <<EOT
+AMI for Nomad and Consul on Ubuntu 16.04
+    EOT
+    bucket_labels = {
+      "owner"          = "gerard-hashi"
+      "os"             = "Ubuntu",
+      "ubuntu-version" = "Xenial 16.04",
+    }
+  }
+
   sources = ["source.amazon-ebs.hashistack"]
 
   provisioner "shell" {

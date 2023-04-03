@@ -6,24 +6,31 @@ data "aws_vpc" "default" {
   default = true
 }
 
+data "hcp_packer_image" "nomad-consul-ubuntu" {
+  bucket_name    = "nomad-consul-ubuntu"
+  channel        = "latest"
+  cloud_provider = "aws"
+  region         = "ap-southeast-2"
+}
+
 resource "aws_security_group" "consul_nomad_ui_ingress" {
   name   = "${var.name}-ui-ingress"
   vpc_id = data.aws_vpc.default.id
 
   # Nomad
   ingress {
-    from_port       = 4646
-    to_port         = 4646
-    protocol        = "tcp"
-    cidr_blocks     = [var.allowlist_ip]
+    from_port   = 4646
+    to_port     = 4646
+    protocol    = "tcp"
+    cidr_blocks = [var.allowlist_ip]
   }
 
   # Consul
   ingress {
-    from_port       = 8500
-    to_port         = 8500
-    protocol        = "tcp"
-    cidr_blocks     = [var.allowlist_ip]
+    from_port   = 8500
+    to_port     = 8500
+    protocol    = "tcp"
+    cidr_blocks = [var.allowlist_ip]
   }
 
   ingress {
@@ -118,7 +125,7 @@ resource "aws_security_group" "clients_ingress" {
 }
 
 resource "aws_instance" "server" {
-  ami                    = var.ami
+  ami                    = data.hcp_packer_image.nomad-consul-ubuntu.cloud_image_id
   instance_type          = var.server_instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.consul_nomad_ui_ingress.id, aws_security_group.ssh_ingress.id, aws_security_group.allow_all_internal.id]
@@ -162,7 +169,7 @@ resource "aws_instance" "server" {
 }
 
 resource "aws_instance" "client" {
-  ami                    = var.ami
+  ami                    = data.hcp_packer_image.nomad-consul-ubuntu.cloud_image_id
   instance_type          = var.client_instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.consul_nomad_ui_ingress.id, aws_security_group.ssh_ingress.id, aws_security_group.clients_ingress.id, aws_security_group.allow_all_internal.id]
