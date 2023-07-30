@@ -25,4 +25,4 @@ vault {
   address = "http://active.vault.service.consul:8200"
 }
 
-log_level = "DEBUG"
+log_level = "TRACE"

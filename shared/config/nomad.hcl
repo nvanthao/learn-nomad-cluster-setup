@@ -24,4 +24,4 @@ vault {
   token            = ""
 }
 
-log_level = "DEBUG"
+log_level = "TRACE"
